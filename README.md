@@ -1,4 +1,4 @@
-# Colorize
+# Colorize
 
 Package clrz colorize text like code for display in HTML or other encoding. 
 
