@@ -10,13 +10,13 @@ import (
 type TypeStyle uint64
 
 const (
-	// TextColorFlag is set if a text color is defined.
+	// TextColorFlag is set when a text color is defined.
 	textColorFlag TypeStyle = 1 << iota
-	// BackColorFlag is set if a background color is defined.
+	// BackColorFlag is set when a background color is defined.
 	backColorFlag
-	// ItalicFlag is the text is italic.
+	// ItalicFlag is set when the text is italic.
 	italicFlag
-	// BoldFlag is the text is bold.
+	// BoldFlag is set when the text is bold.
 	boldFlag
 )
 
