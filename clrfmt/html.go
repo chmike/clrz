@@ -2,12 +2,13 @@ package clrfmt
 
 import (
 	"bytes"
-	"colorize/clrcore"
 	"errors"
 	"fmt"
 	"io"
 	"sort"
 	"strings"
+
+	"github.com/chmike/clrz/clrcore"
 )
 
 // HTML writes the text formatted in HTML, and return the number of bytes written.

@@ -1,11 +1,12 @@
 package clrz
 
 import (
-	"colorize/clrcore"
-	"colorize/clrfmt"
 	"fmt"
 	"io"
 	"io/ioutil"
+
+	"github.com/chmike/clrz/clrcore"
+	"github.com/chmike/clrz/clrfmt"
 )
 
 // FormatCSS return a CSS encode style for HTML formatted text.
