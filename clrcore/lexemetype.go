@@ -12,8 +12,8 @@ type LexemeType struct {
 	Name     string        // full name (e.g. "MultiLine.Comment.Lexeme")
 }
 
-func (t *LexemeType) String() string {
-	return t.Name
+func (l *LexemeType) String() string {
+	return l.Name
 }
 
 var lexemeClassTypes = make([]*LexemeType, 0, 8)
