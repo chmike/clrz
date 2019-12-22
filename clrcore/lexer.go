@@ -79,7 +79,7 @@ func RegisterLexer(l *LexerInfo) {
 	}
 }
 
-// Lexers return a list of all the LexerInfo.
+// Lexers return a copy of list of all the LexerInfo.
 func Lexers() []*LexerInfo {
 	return append([]*LexerInfo(nil), lexersList...)
 }
@@ -89,7 +89,7 @@ func LexerByName(name string) *LexerInfo {
 	return lexersByName[name]
 }
 
-// LexersByMimeType return the lexers associated to the given mime type.
+// LexersByMimeType return a copy of the list of lexers associated to the given mime type.
 func LexersByMimeType(mimeType string) []*LexerInfo {
 	q := lexersByMimeType[mimeType]
 	if q == nil {
@@ -98,7 +98,7 @@ func LexersByMimeType(mimeType string) []*LexerInfo {
 	return append([]*LexerInfo(nil), q...)
 }
 
-// LexersByFileName return the lexers whose file name pattern match the file name.
+// LexersByFileName return a list of lexers whose file name pattern match the given file name.
 func LexersByFileName(fileName string) []*LexerInfo {
 	if fileName == "" || fileName[len(fileName)-1] == os.PathSeparator {
 		return nil
