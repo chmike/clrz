@@ -18,7 +18,7 @@ type LexerInfo struct {
 	// File name patterns used to identify language by file names.
 	FileNames []string
 	// NewLexer is a function instantiating a lexer ready to parse the given text.
-	// The lexer will return a StopLexer when one of the stopMarkers if found in the text.
+	// The lexer will return a StopLexer when one of the stopMarkers is found in the text.
 	NewLexer func(text string, stopMarkers ...string) (Lexer, error)
 }
 
@@ -33,7 +33,7 @@ type Lexer interface {
 
 	// Score returns a matching score for the parsed language. Its value only
 	// make sense once a Stop lexeme has been reached. When trying multiple lexer
-	// on a piece of text, the lexer with the highest score will be picked.
+	// on a piece of text, the lexer returning the highest score should be picked.
 	Score() int
 }
 
@@ -80,17 +80,17 @@ func RegisterLexer(l *LexerInfo) {
 	}
 }
 
-// Lexers return a list of all the LexerInfo
+// Lexers return a list of all the LexerInfo.
 func Lexers() []*LexerInfo {
 	return append([]*LexerInfo(nil), lexersList...)
 }
 
-// LexerByName return the lexer associated to the given name
+// LexerByName return the lexer associated to the given name.
 func LexerByName(name string) *LexerInfo {
 	return lexersByName[name]
 }
 
-// LexersByMimeType return the lexers associated to the given mime type
+// LexersByMimeType return the lexers associated to the given mime type.
 func LexersByMimeType(mimeType string) []*LexerInfo {
 	q := lexersByMimeType[mimeType]
 	if q == nil {
