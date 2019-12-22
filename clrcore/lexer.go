@@ -183,7 +183,7 @@ func Normalize(str string, tabLen int) string {
 			if beg != end {
 				buf.WriteString(str[beg:end])
 			}
-			buf.WriteRune('\n')
+			buf.WriteByte('\n')
 			end++
 			if end < len(str) && str[end] == '\n' {
 				end++
@@ -193,7 +193,7 @@ func Normalize(str string, tabLen int) string {
 			if beg != end {
 				buf.WriteString(str[beg:end])
 			}
-			buf.WriteRune('\n')
+			buf.WriteByte('\n')
 			end++
 			if end < len(str) && str[end] == '\r' {
 				end++
