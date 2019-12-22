@@ -55,8 +55,8 @@ func FormatHTML(w io.Writer, text string, lang ...string) (int, error) {
 		}
 	}
 	if bestLexerInfo == nil {
-		return 0, fmt.Errorf("failed HTML formatting")
+		return 0, fmt.Errorf("failed HTML formatting: no matching lexer found")
 	}
-	_, n, _ := clrfmt.HTML(ioutil.Discard, bestLexerInfo, text)
+	_, n, _ := clrfmt.HTML(w, bestLexerInfo, text)
 	return n, nil
 }
