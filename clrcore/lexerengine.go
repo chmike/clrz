@@ -9,7 +9,7 @@ import (
 // LexerEngine is an engine to decompose an input text into lexemes based on
 // the given definition and optional extend information.
 type LexerEngine struct {
-	def         *LexerDef       // The RegexeLexerDef currently used.
+	def         *LexerDef       // The LexerDef currently used.
 	stopMarkers []string        // String markers stopping the lexer.
 	score       int             // The score of the parsed text with the given definition.
 	str         string          // Text remaining to be parsed (slice of text.Str).
@@ -23,8 +23,8 @@ type LexerEngine struct {
 	extend      interface{}     // Language specific additionnal information.
 }
 
-// NewLexerEngine returns a LexerEngine that will use the RegexLexerDef to
-// parse the input text lexeme. The parsing will stop when an end marker is found
+// NewLexerEngine returns a LexerEngine that will use the LexerDef to
+// parse the input text into lexemes. The parsing will stop when an end marker is found
 // in the text or the end of the text is reached.
 func NewLexerEngine(def *LexerDef, text string, stopMarkers []string, extend interface{}) (*LexerEngine, error) {
 	if err := def.Init(); err != nil {
@@ -53,7 +53,7 @@ func (l *LexerEngine) RemainingText() string {
 }
 
 // NextLexeme return the next lexeme extracted from the input text until a stop
-// lexeme is returned. The stop lexeme is then returned forever.
+// lexeme is returned. The stop lexeme is then returned on every call.
 func (l *LexerEngine) NextLexeme() (lexeme Lexeme) {
 	if !l.stopLexeme.IsNil() {
 		return l.stopLexeme
@@ -95,11 +95,10 @@ func (l *LexerEngine) QueueEmpty() bool {
 // or a StopError lexeme if the queue is empty.
 func (l *LexerEngine) UnqueueLexeme() (lexeme Lexeme) {
 	if l.outIdx == len(l.outBuf) {
-		lexeme = Lexeme{StopError, "can't unqueue lexeme from an empty queue"}
-	} else {
-		lexeme = l.outBuf[l.outIdx]
-		l.outIdx++
+		return Lexeme{StopError, "can't unqueue lexeme from an empty queue"}
 	}
+	lexeme = l.outBuf[l.outIdx]
+	l.outIdx++
 	return
 }
 
@@ -138,7 +137,7 @@ func (l *LexerEngine) PushMode(name string) {
 			return
 		}
 	}
-	l.err = fmt.Errorf("LexerDef '%s' has no mode '%s'", l.def.Name, name)
+	l.err = fmt.Errorf("LexerDef %q has no mode %q", l.def.Name, name)
 }
 
 // PopMode set the current mode to the stacked mode.
