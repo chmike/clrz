@@ -154,7 +154,8 @@ func (l *Lexeme) PopDecimalNumber(end int) (lexeme Lexeme) {
 			c = l.Str[exp]
 			// scan sign if any
 			if c == '+' || c == '-' {
-				if exp++; exp == len(l.Str) {
+				exp++
+				if len(l.Str) == exp {
 					break
 				}
 				c = l.Str[exp]
@@ -186,15 +187,16 @@ func (l *Lexeme) PopNumber() (lexeme Lexeme) {
 	c := l.Str[0]
 	// scan sign if any
 	if c == '-' || c == '+' {
-		if len(l.Str) == 1 {
+		end++
+		if len(l.Str) == end {
 			return
 		}
-		end++
 		c = l.Str[1]
 	}
 	// if . and followed by a digit, it's a decimal number, otherwise it's not a number.
 	if c == '.' {
-		if end++; end == len(l.Str) {
+		end++
+		if len(l.Str) == end {
 			return
 		}
 		c = l.Str[end]
@@ -269,13 +271,13 @@ func (l *Lexeme) PopNumber() (lexeme Lexeme) {
 
 // PopWhiteSpaces extracts white spaces from the front of the
 // target lexeme, and return it.
-// A white space character is smaller or equal than ' ' and not '\n' or '\r.
+// A white space character is smaller or equal than ' ' and not '\n', '\r' or DEL.
 // It requires the target string is at least 1 char long and that the first char
 // is a white space.
 func (l *Lexeme) PopWhiteSpaces() (lexeme Lexeme) {
 	for end := 1; end < len(l.Str); end++ {
 		c := l.Str[end]
-		if c > ' ' || c == '\n' || c == '\r' {
+		if c != 127 && (c > ' ' || c == '\n' || c == '\r') {
 			return l.PopLexeme(TextWhiteSpace, end)
 		}
 	}
