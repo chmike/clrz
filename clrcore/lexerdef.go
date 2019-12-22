@@ -31,28 +31,28 @@ type LexerDefMode struct {
 // A LexerDefRule defines a condition and action to perform.
 type LexerDefRule interface {
 	Init() error            // Initialize the rule only once.
-	Exec(*LexerEngine) bool // Return true if must exec from first mode rule.
+	Exec(*LexerEngine) bool // Return true if must exec from first rule of the mode.
 }
 
 // Init initializes the LexerDef and return an error if any.
 func (d *LexerDef) Init() (err error) {
 	if d.InitFunc == nil {
-		return fmt.Errorf("LexerDef '%s' has undefined InitFunc", d.Name)
+		return fmt.Errorf("LexerDef %q has undefined InitFunc", d.Name)
 	}
 	d.once.Do(func() {
 		d.InitFunc(d)
 		if len(d.Modes) == 0 {
-			err = fmt.Errorf("LexerDef '%s' has no modes", d.Name)
+			err = fmt.Errorf("LexerDef %q has no modes", d.Name)
 			return
 		}
 		for _, m := range d.Modes {
 			if len(m.Rules) == 0 {
-				err = fmt.Errorf("mode '%s' in LexerDef '%s' has no rules", m.Name, d.Name)
+				err = fmt.Errorf("mode %q in LexerDef %q has no rules", m.Name, d.Name)
 				return
 			}
 			for i, r := range m.Rules {
 				if err = r.Init(); err != nil {
-					err = fmt.Errorf("%s (LexerDef='%s', Mode='%s', Rule=%d)", err, d.Name, m.Name, i)
+					err = fmt.Errorf("%s (LexerDef=%q, Mode=%q, Rule=%d)", err, d.Name, m.Name, i)
 					return
 				}
 			}
@@ -113,7 +113,8 @@ func (r *RegexDefRule) Init() (err error) {
 	return
 }
 
-// Exec executes the regex def rule. Return true if the
+// Exec executes the regex def rule. Return true when execution of rules must
+// restart from the first rule of the mode.
 func (r *RegexDefRule) Exec(l *LexerEngine) bool {
 	match := r.cp.FindStringSubmatchIndex(l.str)
 	if match == nil {
@@ -123,7 +124,7 @@ func (r *RegexDefRule) Exec(l *LexerEngine) bool {
 	return r.Do(l, match)
 }
 
-// All execute list of RegexLexerActionFunc in sequence, abort when l.err is not nil.
+// All execute list of RegexDefRuleFunc in sequence, abort when l.err is not nil.
 // The last action return value yields the return value.
 func All(actions ...RegexDefRuleFunc) RegexDefRuleFunc {
 	return func(l *LexerEngine, match []int) (res bool) {
