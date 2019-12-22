@@ -40,7 +40,7 @@ func HTML(w io.Writer, info *clrcore.LexerInfo, text string) (score int, n int, 
 			return 0, bytesWritten, fmt.Errorf("unknown LexemeType %s", lexeme.Type)
 		}
 		buf.Reset()
-		_, err := fmt.Fprintf(&buf, "<scan class=\"%s\">", className)
+		_, err := fmt.Fprintf(&buf, "<scan class=%q>", className)
 		if err != nil {
 			return 0, bytesWritten, err
 		}
@@ -157,7 +157,7 @@ var classNameToLexemeTypeMap = map[string]*clrcore.LexemeType{}
 
 // generate class names: a - z,aa - az,ba - bz,ca - cz, ...
 func classNameFromIdx(idx int) string {
-	buf := make([]byte, 8)
+	var buf [8]byte
 	strIdx := len(buf) - 1
 	buf[strIdx] = byte('a' + (idx % 26))
 	for idx /= 26; idx > 0; idx /= 26 {
