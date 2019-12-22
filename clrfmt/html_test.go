@@ -2,10 +2,11 @@ package clrfmt
 
 import (
 	"bytes"
-	"colorize/clrcore"
 	"errors"
 	"io"
 	"testing"
+
+	"github.com/chmike/clrz/clrcore"
 )
 
 func TestHTML(t *testing.T) {
@@ -215,5 +216,28 @@ func TestCSS2(t *testing.T) {
 	if err == nil {
 		t.Errorf("unexpected nil error")
 	}
+}
 
+func TestClassNameFromIdx(t *testing.T) {
+	tests := []struct {
+		id  int
+		idx int
+		str string
+	}{
+		{1, 0, "a"},
+		{2, 25, "z"},
+		{3, 26, "aa"},
+		{4, 26 + 25, "az"},
+		{5, 26 + 26, "ba"},
+		{6, 26*26 + 25, "zz"},
+		{7, 26*26 + 26, "aaa"},
+		{8, 26*26*26 + 26*26 + 25, "zzz"},
+		{9, 26*26*26 + 26*26 + 26, "aaaa"},
+	}
+	for _, test := range tests {
+		str := classNameFromIdx(test.idx)
+		if str != test.str {
+			t.Errorf("%d. expected %s for %d, got %s", test.id, test.str, test.idx, str)
+		}
+	}
 }
