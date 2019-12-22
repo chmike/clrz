@@ -44,28 +44,27 @@ var (
 	lexersByFileName = make(map[string][]*LexerInfo) // index of lexers by file name pattern
 )
 
-// RegisterLexer register a Lexer.
+// RegisterLexer register a Lexer. Panics il the lexer is invalid.
 func RegisterLexer(l *LexerInfo) {
 	if l == nil {
 		return
 	}
 	if len(l.Names) == 0 {
-		panic("no names defined")
+		panic("lexer has no names defined")
 	}
 	if l.NewLexer == nil {
-		panic("no function New defined")
+		panic("lexer has no NewLexer function defined")
 	}
 	// check for name duplicates
 	for _, name := range l.Names {
 		if _, ok := lexersByName[name]; ok {
-			panic(fmt.Sprintf("Lexer name %q already registered", name))
+			panic(fmt.Sprintf("lexer name %q already registered", name))
 		}
 	}
-	name := l.Names[0]
 	// check that fileNames are valid
 	for _, fileName := range l.FileNames {
 		if _, err := filepath.Match(fileName, "     "); err != nil {
-			panic(fmt.Sprintf("Lexer %q has invalid file name pattern %q", name, fileName))
+			panic(fmt.Sprintf("lexer %q has invalid file name pattern %q", l.Names[0], fileName))
 		}
 	}
 	for _, name := range l.Names {
@@ -73,10 +72,10 @@ func RegisterLexer(l *LexerInfo) {
 	}
 	lexersList = append(lexersList, l)
 	for _, mimeType := range l.MimeTypes {
-		lexersByMimeType[mimeType] = append([]*LexerInfo(lexersByMimeType[mimeType]), l)
+		lexersByMimeType[mimeType] = append(lexersByMimeType[mimeType], l)
 	}
 	for _, fileName := range l.FileNames {
-		lexersByFileName[fileName] = append([]*LexerInfo(lexersByFileName[fileName]), l)
+		lexersByFileName[fileName] = append(lexersByFileName[fileName], l)
 	}
 }
 
@@ -125,8 +124,8 @@ func LexersByFileName(fileName string) []*LexerInfo {
 	return res
 }
 
-// LexerByScore select the lexer from the lexers slice based on the highest score.
-// When two or more lexers have the highest score, the first one is picked.
+// LexerByScore select the lexer from the lexers slice with the highest score.
+// When two or more lexers have the same highest score, the first one is picked.
 // It is thus advised to order the lexers by decreasing preference order.
 // If lexers is nil, the search is performed on all lexers.
 func LexerByScore(text string, lexers []*LexerInfo, stopMarkers ...string) *LexerInfo {
