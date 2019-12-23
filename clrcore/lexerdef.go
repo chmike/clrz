@@ -226,11 +226,11 @@ func PopMode() RegexDefRuleFunc {
 var (
 	WhiteSpaceRule        = &RegexDefRule{Re: `[ \t\f\v]+`, Do: PopMatch(TextWhiteSpace)}
 	NewLineRule           = &RegexDefRule{Re: `[\n\r]+`, Do: PopMatch(TextNewLine)}
-	ASCIIIdentifierRule   = &RegexDefRule{Re: `[a-zA-Z][a-zA-Z0-9]*`, Do: PopMatch(CodeIdentifier)}
+	ASCIIIdentifierRule   = &RegexDefRule{Re: `[_a-zA-Z][_a-zA-Z0-9]*`, Do: PopMatch(CodeIdentifier)}
 	AssignmentRule        = &RegexDefRule{Re: `=|\+=|-=|\*=|/=|!=|%=|\|=|&=`, Do: PopMatch(CodeOperatorAssignment)}
 	MathOpRule            = &RegexDefRule{Re: `[\+-\*/%]`, Do: PopMatch(CodeOperatorArithmetic)}
 	LogicalOpRule         = &RegexDefRule{Re: `&&|\|\||!`, Do: PopMatch(CodeOperatorLogical)}
-	BinaryOpRule          = &RegexDefRule{Re: `[\|&^]`, Do: PopMatch(CodeOperatorBinary)}
+	BinaryOpRule          = &RegexDefRule{Re: `[\|&^~]`, Do: PopMatch(CodeOperatorBinary)}
 	OperatorsRule         = &RegexDefRule{Re: `\+=|-=|\*=|/=|!=|\|\|&&|[<>%!\+\-\*/=]`, Do: PopMatch(CodeOperator)}
 	PunctuationRule       = &RegexDefRule{Re: `[\.,;]`, Do: PopMatch(CodePunctuation)}
 	DelimiterRule         = &RegexDefRule{Re: `[{}\[\]\(\)]`, Do: PopMatch(CodeDelimiter)}
