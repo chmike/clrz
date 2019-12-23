@@ -18,17 +18,17 @@ func (l *LexemeType) String() string {
 
 var lexemeClassTypes = make([]*LexemeType, 0, 8)
 
-// LexemeClassTypes return a copy of the list of all lexeme type classes.
+// LexemeClassTypes returns the list of all lexeme type classes.
 // A lexeme class type is a lexeme type with a nil parent.
 func LexemeClassTypes() []*LexemeType {
-	return append([]*LexemeType(nil), lexemeClassTypes...)
+	return lexemeClassTypes
 }
 
 var lexemeTypes = make([]*LexemeType, 0, 32)
 
-// LexemeTypes return a copy of the list of all lexeme types.
+// LexemeTypes returns the list of all lexeme types.
 func LexemeTypes() []*LexemeType {
-	return append([]*LexemeType(nil), lexemeTypes...)
+	return lexemeTypes
 }
 
 var lexemesTypesByName = make(map[string]*LexemeType)
