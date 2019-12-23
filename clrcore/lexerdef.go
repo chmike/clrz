@@ -227,6 +227,7 @@ var (
 	WhiteSpaceRule        = &RegexDefRule{Re: `[ \t\f\v]+`, Do: PopMatch(TextWhiteSpace)}
 	NewLineRule           = &RegexDefRule{Re: `[\n\r]+`, Do: PopMatch(TextNewLine)}
 	ASCIIIdentifierRule   = &RegexDefRule{Re: `[_a-zA-Z][_a-zA-Z0-9]*`, Do: PopMatch(CodeIdentifier)}
+	UnicodeIdentifierRule = &RegexDefRule{Re: `[_\pL][_\pL0-9]*`, Do: PopMatch(CodeIdentifier)}
 	AssignmentRule        = &RegexDefRule{Re: `=|\+=|-=|\*=|/=|!=|%=|\|=|&=`, Do: PopMatch(CodeOperatorAssignment)}
 	MathOpRule            = &RegexDefRule{Re: `[\+-\*/%]`, Do: PopMatch(CodeOperatorArithmetic)}
 	LogicalOpRule         = &RegexDefRule{Re: `&&|\|\||!`, Do: PopMatch(CodeOperatorLogical)}
