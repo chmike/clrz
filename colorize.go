@@ -9,8 +9,19 @@ import (
 	"github.com/chmike/clrz/clrfmt"
 )
 
-// FormatCSS return a CSS encode style for HTML formatted text.
-// ... need a detailed explanation of textStyle specification.
+// FormatCSS writes into w a list of CSS classes with styles definition for HTML formatted text.
+// The textStyle is a multiline string specifying the style of different lexeme types.
+// A line starts with a lexeme type name (e.g. Code.String), and is followed by the style
+// specification. The style specification is a combination of "italic", "bold", "text#RRGGBB",
+// "back#RRGGBB" where RRGGBB is the red, green and blue intensity in hexadecimal.
+//
+//	    Code.Identifier text#FF0000
+//      Code.Comment text#a0a0a0
+//      Code.Identifier.Variable italic
+//      Code.Identifier.Keyword bold
+//      Code.String text#fc03df
+//
+// The prefixes are tages les "<code>" or "<code><pre>" to limit the scope of the defined classes.
 func FormatCSS(w io.Writer, textStyle string, prefix ...string) (int, error) {
 	style, err := clrcore.NewStyle(textStyle)
 	if err != nil {
@@ -20,7 +31,12 @@ func FormatCSS(w io.Writer, textStyle string, prefix ...string) (int, error) {
 }
 
 // FormatHTML return an HTML encoded string using the CSS style classes.
+// When more than one or no language are specified, the language with highest score is picked.
 func FormatHTML(w io.Writer, text string, lang ...string) (int, error) {
+	if len(lang) == 1 {
+		_, n, err := clrfmt.HTML(w, clrcore.LexerByName(lang[0]), text)
+		return n, err
+	}
 	var bestScore int
 	var bestLexerInfo *clrcore.LexerInfo
 	var lexerInfos []*clrcore.LexerInfo
